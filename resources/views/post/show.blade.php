@@ -1,17 +1,23 @@
 @extends("layouts.app")
 
-@section("title", "Post")
+@section('title', 'Post')
 
-@section("content")
+@section('content')
 
-@if ($post['is_new'])
-    <div>New Post!</div>
-@else
-    <div>Old Post!</div>
-@endif
+    @if (session('status'))
+        <div style="background-color: green; color:white">
+            {{ session('status') }}
+        </div>
+    @endif
 
-<h1>{{ $post['title'] }}</h1>
-<p>
-    {{ $post['content'] }}
-</p>
+    @if ($post['is_new'])
+        <div>New Post!</div>
+    @else
+        <div>Old Post!</div>
+    @endif
+
+    <h1>{{ $post['title'] }}</h1>
+    <p>
+        {{ $post['content'] }}
+    </p>
 @endsection

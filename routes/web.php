@@ -17,4 +17,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, "home"])->name("home.index");
 Route::get('/contact', [HomeController::class, "contact"])->name("home.contact");
-Route::resource('posts', PostsController::class)->only(['index', 'show', 'create', 'store'])->where(['post'=> '[0-9]+']);
+Route::resource('posts', PostsController::class)->where(['post' => '[0-9]+']);

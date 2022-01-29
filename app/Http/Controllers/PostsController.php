@@ -37,10 +37,8 @@ class PostsController extends Controller
     public function store(StorePost $request)
     {
         $validated = $request->validated();
-        $post = new BlogPosts;
-        $post->title = $validated->input('title');
-        $post->content = $validated->input('content');
-        $post->save();
+        $post = BlogPosts::create($validated);
+        $request->session()->flash('status', 'Post created!');
         return redirect()->route('posts.show', ['post' => $post->id]);
     }
 
@@ -63,7 +61,7 @@ class PostsController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view("post.edit", ["post" => BlogPosts::findOrFail($id)]);
     }
 
     /**
@@ -73,9 +71,14 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StorePost $request, $id)
     {
-        //
+        $post = BlogPosts::findOrFail($id);
+        $validated = $request->validated();
+        $post->fill($validated);
+        $post->save();
+        session()->flash('status', 'Post updated!');
+        return redirect()->route('posts.show', ['post' => $post->id]);
     }
 
     /**
@@ -86,6 +89,9 @@ class PostsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $post = BlogPosts::findOrFail($id);
+        $post->delete();
+        session()->flash('status', "Post deleted!");
+        return redirect()->route('posts.index');
     }
 }
