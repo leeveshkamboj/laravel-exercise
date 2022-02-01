@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePost;
-use App\Models\BlogPosts;
+use App\Models\BlogPost;
 use Illuminate\Http\Request;
 
 class PostsController extends Controller
@@ -15,7 +15,7 @@ class PostsController extends Controller
      */
     public function index()
     {
-        return view("post.index", ["posts" => BlogPosts::all()]);
+        return view('posts.index', ['posts' => BlogPost::all()]);
     }
 
     /**
@@ -25,7 +25,7 @@ class PostsController extends Controller
      */
     public function create()
     {
-        return view('post.create');
+        return view('posts.create');
     }
 
     /**
@@ -37,8 +37,10 @@ class PostsController extends Controller
     public function store(StorePost $request)
     {
         $validated = $request->validated();
-        $post = BlogPosts::create($validated);
-        $request->session()->flash('status', 'Post created!');
+        $post = BlogPost::create($validated);
+
+        $request->session()->flash('status', 'The blog post was created!');
+
         return redirect()->route('posts.show', ['post' => $post->id]);
     }
 
@@ -50,7 +52,9 @@ class PostsController extends Controller
      */
     public function show($id)
     {
-        return view("post.show", ["post" => BlogPosts::findOrFail($id)]);
+        // abort_if(!isset($this->posts[$id]), 404);
+
+        return view('posts.show', ['post' => BlogPost::findOrFail($id)]);
     }
 
     /**
@@ -61,7 +65,7 @@ class PostsController extends Controller
      */
     public function edit($id)
     {
-        return view("post.edit", ["post" => BlogPosts::findOrFail($id)]);
+        return view('posts.edit', ['post' => BlogPost::findOrFail($id)]);
     }
 
     /**
@@ -73,11 +77,13 @@ class PostsController extends Controller
      */
     public function update(StorePost $request, $id)
     {
-        $post = BlogPosts::findOrFail($id);
+        $post = BlogPost::findOrFail($id);
         $validated = $request->validated();
         $post->fill($validated);
         $post->save();
-        session()->flash('status', 'Post updated!');
+
+        $request->session()->flash('status', 'Blog post was updated!');
+
         return redirect()->route('posts.show', ['post' => $post->id]);
     }
 
@@ -89,9 +95,11 @@ class PostsController extends Controller
      */
     public function destroy($id)
     {
-        $post = BlogPosts::findOrFail($id);
+        $post = BlogPost::findOrFail($id);
         $post->delete();
-        session()->flash('status', "Post deleted!");
+
+        session()->flash('status', 'Blog post was deleted!');
+
         return redirect()->route('posts.index');
     }
 }
