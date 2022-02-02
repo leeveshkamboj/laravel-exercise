@@ -5,8 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class BlogPosts extends Model
+class Comment extends Model
 {
-    protected $fillable = ['title', 'content'];
     use HasFactory;
+    public function blogPost()
+    {
+        return $this->belongsTo('App\Models\BlogPost');
+    }
 }
